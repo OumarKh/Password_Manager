@@ -19,6 +19,7 @@ class PassGen(QMainWindow):
         slider = QSlider(Qt.Horizontal, self)
         slider.setMinimum(6)
         slider.setMaximum(24)
+        slider.setValue(6)
         slider.setGeometry(30, 30, 250, 30)
         slider.move(100, 50)
         slider.setTickPosition(QSlider.TicksBelow)
@@ -28,6 +29,7 @@ class PassGen(QMainWindow):
         self.length_txbx = QLineEdit(self)
         self.length_txbx.setAlignment(Qt.AlignCenter)
         self.length_txbx.setReadOnly(True)
+        self.length_txbx.setText("6")
         self.length_txbx.move(30, 45)
         self.length_txbx.resize(40, 30)
 
@@ -35,19 +37,14 @@ class PassGen(QMainWindow):
         label2 = QLabel("Includes :", self)
         label2.move(10, 80)
         # Checkboxes for password customisation
-        uppercase = QCheckBox("Upper Case", self)
-        uppercase.move(50, 110)
-
-
-        lowercase = QCheckBox("Lower Case", self)
-        lowercase.move(160, 110)
-
-        numbers = QCheckBox("Numbers", self)
-        numbers.move(270, 110)
-
-        speccharacter = QCheckBox("Characters", self)
-        speccharacter.move(160, 140)
-
+        self.uppcase = QCheckBox("Upper Case", self)
+        self.uppcase.move(50, 110)
+        self.lowcase = QCheckBox("Lower Case", self)
+        self.lowcase.move(160, 110)
+        self.nums = QCheckBox("Numbers", self)
+        self.nums.move(270, 110)
+        self.specchar = QCheckBox("Characters", self)
+        self.specchar.move(160, 140)
 
         # Setting the window functionalities
         # A button to pass to the Password safe window
@@ -72,21 +69,28 @@ class PassGen(QMainWindow):
         GenButton.move(20, 260)
         GenButton.clicked.connect(self.GeneratePassword)
 
-    def update_txbx(self, value):
-        self.length_txbx.setText(str(value))
-
-
+    #This function creates to password with the chosen parameters
     def GeneratePassword(self):
         upp = "QWERTYUIOPASDFGHJKLZXCBNM"
         low = "qwertyuiopasdfghjklzxcbnm"
         num = "1234567890"
         car = "!@#$%&*=+-_[}]{/?"
-        usedString = ""
-
+        usedStr =""
+        if self.uppcase.isChecked():
+            usedStr = usedStr + upp
+        if self.lowcase.isChecked():
+            usedStr = usedStr + low
+        if self.nums.isChecked():
+            usedStr = usedStr + num
+        if self.specchar.isChecked():
+            usedStr = usedStr + car
         passleng = int(self.length_txbx.text())
-        generatedPassword = ''.join((random.choice(upp) for x in range(passleng)))
+        generatedPassword = ''.join((random.choice(usedStr) for x in range(passleng)))
         self.genPass.setText(generatedPassword)
 
+    #This function sets the textbox beside the slider to the corresponding value from the slider
+    def update_txbx(self, value):
+        self.length_txbx.setText(str(value))
 
     # Defining the function that changes the window from pasword Generator to Password Safe
     def GoToPassSafe(self):
