@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QSlider, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QSlider, QLineEdit, QCheckBox, QMessageBox,QApplication
 from PyQt5.QtCore import Qt
 from Classes import PassSafe
 import random
@@ -61,7 +61,7 @@ class PassGen(QMainWindow):
         self.genPass = QLineEdit(self)
         self.genPass.setAlignment(Qt.AlignCenter)
         self.genPass.setReadOnly(False)
-        self.genPass.move(50, 200)
+        self.genPass.move(10, 200)
         self.genPass.resize(300, 30)
 
         # Adding a button to execute the password generation
@@ -69,6 +69,22 @@ class PassGen(QMainWindow):
         GenButton.move(20, 260)
         GenButton.clicked.connect(self.GeneratePassword)
 
+
+        #Adding a litte button to make it easier to copy the generated passsword
+        self.cpbutton =QPushButton("",self)
+        self.cpbutton.setIcon(QIcon('icons/copy.png'))
+        self.cpbutton.move(320,200)
+        self.cpbutton.resize(50,30)
+        self.cpbutton.clicked.connect(self.CopyToClipboard)
+
+    def CopyToClipboard(self):
+        text = self.genPass.text()
+        if text :
+            clipboard = QApplication.clipboard()
+            clipboard.setText(text)
+            QMessageBox.information(self, "Copied", "Text has been copied to clipboard.")
+        else:
+            QMessageBox.warning(self, "Error", "No text to copy.")
     #This function creates to password with the chosen parameters
     def GeneratePassword(self):
         upp = "QWERTYUIOPASDFGHJKLZXCBNM"
