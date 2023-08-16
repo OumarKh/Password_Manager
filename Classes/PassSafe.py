@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog, QPushButton, QLabel, QLineEdit, QMessageBox
 from Classes import PassGen
@@ -86,16 +87,27 @@ class PassSafe(QDialog):
 
             self.searchbox = QLineEdit(self)
             self.searchbox.move(90,155)
+            self.searchbox.resize(300,30)
             self.searchbox.hide()
 
-            
+            self.searchbtn = QPushButton("Search",self)
+            self.searchbtn.setIcon(QIcon('icons/search.png'))
+            self.searchbtn.move(400,155)
+            self.savebtn.clicked.connect(self.showResult)
+            self.searchbtn.setLayoutDirection(QtCore.Qt.LeftToRight)
+            self.searchbtn.hide()
+
+
+
+    def showResult(self):
+        pass
     def savedata(self):
         pass
 
     def login(self):
 
-        if self.usernameText.text() == 'Oumar' and self.password.text() == 'oumar':
-            QMessageBox.information(self, "Logged In", "Welcome Oumar")
+        if self.usernameText.text() == 'User' and self.password.text() == 'user':
+            QMessageBox.information(self, "Logged In", "Welcome User")
             # Clearing out the login tools after logging in
             self.usernameText.hide()
             self.label1.hide()
@@ -114,6 +126,7 @@ class PassSafe(QDialog):
             self.savebtn.show()
             self.label8.show()
             self.searchbox.show()
+            self.searchbtn.show()
 
         else:
             QMessageBox.information(self, "Error", "Wrong Credentials")
