@@ -2,6 +2,8 @@ from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog, QPushButton, QLabel, QLineEdit, QMessageBox
 from Classes import PassGen
+from cryptography.fernet import Fernet
+import json
 
 
 class PassSafe(QDialog):
@@ -93,16 +95,25 @@ class PassSafe(QDialog):
             self.searchbtn = QPushButton("Search",self)
             self.searchbtn.setIcon(QIcon('icons/search.png'))
             self.searchbtn.move(400,155)
-            self.savebtn.clicked.connect(self.showResult)
+            self.savebtn.clicked.connect(self.showresult)
             self.searchbtn.setLayoutDirection(QtCore.Qt.LeftToRight)
             self.searchbtn.hide()
 
+            #Adding the text box in which the searched password will appear
+            self.resultbox = QLineEdit(self)
+            self.resultbox.resize(300,30)
+            self.resultbox.move(90,260)
+            self.resultbox.hide()
 
 
-    def showResult(self):
+
+    def showresult(self):
         pass
     def savedata(self):
-        pass
+        data = []
+        data.append(self.service.text())
+        data.append(self.username.text())
+        
 
     def login(self):
 
@@ -127,6 +138,7 @@ class PassSafe(QDialog):
             self.label8.show()
             self.searchbox.show()
             self.searchbtn.show()
+            self.resultbox.show()
 
         else:
             QMessageBox.information(self, "Error", "Wrong Credentials")
